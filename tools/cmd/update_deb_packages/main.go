@@ -31,12 +31,6 @@ func updateStretch(arch string, version string, distro string) {
 
 	row, err := packages.ParseBundle("package_bundle_"+arch+"_debian"+version+".bzl", content)
 
-	packagesFile, err := os.Open("../Packages")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer packagesFile.Close()
-
 	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", distro, "main", debArch)
 	if err != nil {
 		log.Fatal(err)
@@ -52,7 +46,7 @@ func updateStretch(arch string, version string, distro string) {
 		}
 	}
 
-	if arch == "amd64" || arch == "arm64" {
+	if distro == "buster" || arch == "amd64" || arch == "arm64" {
 		err = row.UpdateFromPackageIndex("debian-security", "http://deb.debian.org/debian-security", distro+"/updates", "main", debArch)
 		if err != nil {
 			log.Fatal(err)
