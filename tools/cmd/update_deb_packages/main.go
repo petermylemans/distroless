@@ -9,12 +9,12 @@ import (
 )
 
 func main() {
-	content, err := ioutil.ReadFile("../package_bundle_debian9.bzl")
+	content, err := ioutil.ReadFile("../package_bundle_amd64_debian9.bzl")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	row, err := packages.ParseBundle("package_bundle_debian9.bzl", content)
+	row, err := packages.ParseBundle("package_bundle_amd64_debian9.bzl", content)
 
 	packagesFile, err := os.Open("../Packages")
 	if err != nil {
@@ -22,24 +22,25 @@ func main() {
 	}
 	defer packagesFile.Close()
 
-	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", "stretch", "main", "amd64")
+	arch := "amd64"
+	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", "stretch", "main", arch)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", "stretch-updates", "main", "amd64")
+	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", "stretch-updates", "main", arch)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", "stretch-backports", "main", "amd64")
+	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", "stretch-backports", "main", arch)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = row.UpdateFromPackageIndex("debian-security", "http://deb.debian.org/debian-security", "stretch/updates", "main", "amd64")
+	err = row.UpdateFromPackageIndex("debian-security", "http://deb.debian.org/debian-security", "stretch/updates", "main", arch)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	newFile, err := os.Create("../package_bundle_debian9.bzl")
+	newFile, err := os.Create("../package_bundle_amd64_debian9.bzl")
 	if err != nil {
 		log.Fatal(err)
 	}

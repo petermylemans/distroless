@@ -43,26 +43,13 @@ func (bundle *PackageBundle) convertPackageInformation(info PackageInformation) 
 		Key:   &build.Ident{Name: "repository"},
 		Value: &build.StringExpr{Value: info.Repository},
 	}
-	fileDict := build.DictExpr{ForceMultiLine: true}
-	if info.Files != nil {
-		for arch, file := range info.Files {
-			filename := build.KeyValueExpr{
-				Key:   &build.Ident{Name: "filename"},
-				Value: &build.StringExpr{Value: file.Filename},
-			}
-			sha256 := build.KeyValueExpr{
-				Key:   &build.Ident{Name: "sha256"},
-				Value: &build.StringExpr{Value: file.Sha256},
-			}
-			fileDict.List = append(fileDict.List, &build.KeyValueExpr{
-				Key:   &build.Ident{Name: arch},
-				Value: &build.DictExpr{List: []*build.KeyValueExpr{&filename, &sha256}, ForceMultiLine: true},
-			})
-		}
+	filename := build.KeyValueExpr{
+		Key:   &build.Ident{Name: "filename"},
+		Value: &build.StringExpr{Value: info.Filename},
 	}
-	files := build.KeyValueExpr{
-		Key:   &build.Ident{Name: "files"},
-		Value: &fileDict,
+	sha256 := build.KeyValueExpr{
+		Key:   &build.Ident{Name: "sha256"},
+		Value: &build.StringExpr{Value: info.Sha256},
 	}
 
 	return &build.KeyValueExpr{
@@ -71,7 +58,8 @@ func (bundle *PackageBundle) convertPackageInformation(info PackageInformation) 
 			List: []*build.KeyValueExpr{
 				&version,
 				&repository,
-				&files,
+				&filename,
+				&sha256,
 			},
 			ForceMultiLine: true,
 		},

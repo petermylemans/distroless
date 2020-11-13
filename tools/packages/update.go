@@ -83,19 +83,12 @@ func (bundle PackageBundle) UpdateFromPackageIndex(repository string, mirror str
 			info := &bundle[idx]
 			if pkgIndex.Package == info.Name {
 				if version.Compare(info.Version, pkgIndex.Version) < 0 {
-					info.Files = nil
 					info.Version = pkgIndex.Version
 					info.Repository = repository
 				}
 				if info.Version == pkgIndex.Version && info.Repository == repository {
-					if info.Files == nil {
-						files := make(Files)
-						info.Files = files
-					}
-					info.Files[arch] = &File{
-						Filename: pkgIndex.Filename,
-						Sha256:   pkgIndex.SHA256,
-					}
+					info.Filename = pkgIndex.Filename
+					info.Sha256 = pkgIndex.SHA256
 				}
 			}
 		}
