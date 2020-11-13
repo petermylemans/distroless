@@ -36,19 +36,19 @@ func (bundle *PackageBundle) Write(writer io.Writer) error {
 
 func (bundle *PackageBundle) convertPackageInformation(info PackageInformation) *build.KeyValueExpr {
 	version := build.KeyValueExpr{
-		Key:   &build.Ident{Name: "version"},
+		Key:   &build.StringExpr{Value: "version"},
 		Value: &build.StringExpr{Value: info.Version.String()},
 	}
 	repository := build.KeyValueExpr{
-		Key:   &build.Ident{Name: "repository"},
+		Key:   &build.StringExpr{Value: "repository"},
 		Value: &build.StringExpr{Value: info.Repository},
 	}
 	filename := build.KeyValueExpr{
-		Key:   &build.Ident{Name: "filename"},
+		Key:   &build.StringExpr{Value: "filename"},
 		Value: &build.StringExpr{Value: info.Filename},
 	}
 	sha256 := build.KeyValueExpr{
-		Key:   &build.Ident{Name: "sha256"},
+		Key:   &build.StringExpr{Value: "sha256"},
 		Value: &build.StringExpr{Value: info.Sha256},
 	}
 
