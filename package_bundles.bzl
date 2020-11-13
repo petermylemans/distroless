@@ -6,6 +6,7 @@ load("//:package_bundle_ppc64le_debian9.bzl", package_bundle_ppc64le_debian9 = "
 load("//:package_bundle_ppc64le_debian10.bzl", package_bundle_ppc64le_debian10 = "PACKAGES")
 load("//:package_bundle_s390x_debian9.bzl", package_bundle_s390x_debian9 = "PACKAGES")
 load("//:package_bundle_s390x_debian10.bzl", package_bundle_s390x_debian10 = "PACKAGES")
+load(":package_repositories.bzl", "DISTRO_REPOSITORIES")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 BASE_ARCHITECTURES = ["amd64", "arm64"]
@@ -45,9 +46,10 @@ def package_http_files():
         for suffix in DISTRO_SUFFIXES:
             for pkgName in DISTRO_PACKAGE_INFO[arch][suffix]:
                 pkg = DISTRO_PACKAGE_INFO[arch][suffix][pkgName]
-                http_file(
-                    name = pkgName.replace("+", "-") + "_" + arch + suffix,
-                    downloaded_file_path = "file.deb",
-                    sha256 = pkg["sha256"],
-                    urls = [("http://deb.debian.org/debian/" if pkg["repository"] == "debian" else "http://deb.debian.org/debian-security/") + pkg["filename"]],
-                )
+                if pkg["repository"] != "":
+                    http_file(
+                        name = pkgName.replace("+", "-") + "_" + arch + suffix,
+                        downloaded_file_path = "file.deb",
+                        sha256 = pkg["sha256"],
+                        urls = [DISTRO_REPOSITORIES[pkg["repository"]] + "/" + pkg["filename"]],
+                    )
