@@ -49,7 +49,7 @@ func updatePackageBundle(arch string, version string, distro string) {
 		}
 	}
 
-	if distro == "buster" || arch == "amd64" || arch == "arm64" {
+	if distro != "stretch" || arch == "amd64" || arch == "arm64" {
 		err = bundle.UpdateFromPackageIndex("debian-security", "http://deb.debian.org/debian-security", distro+"/updates", "main", debArch)
 		if err != nil {
 			log.Fatal(err)
