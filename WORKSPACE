@@ -296,6 +296,10 @@ load(
     for arch in ARCHITECTURES
 ]
 
+load("//:package_bundles.bzl", "package_http_files")
+
+package_http_files()
+
 # For Jetty
 http_archive(
     name = "jetty",

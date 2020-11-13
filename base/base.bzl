@@ -1,7 +1,7 @@
 # defines a function to replicate the container images for different distributions
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
-load(":distro.bzl", "DISTRO_PACKAGES", "DISTRO_REPOSITORY")
+load("//:package_bundles.bzl", "DISTRO_PACKAGES")
 load("//cacerts:cacerts.bzl", "cacerts")
 load("//:checksums.bzl", "ARCHITECTURES")
 load("@io_bazel_rules_go//go:def.bzl", "go_binary")
@@ -42,7 +42,6 @@ def distro_components(distro_suffix):
                     # directory with specific permissions.
                     ":tmp.tar",
                     ":nsswitch.tar",
-                    DISTRO_REPOSITORY[arch][distro_suffix] + "//file:os_release.tar",
                     ":cacerts_" + arch + distro_suffix + ".tar",
                 ],
                 user = "%d" % uid,
