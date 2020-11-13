@@ -30,6 +30,9 @@ func updatePackageBundle(arch string, version string, distro string) {
 	}
 
 	bundle, err := packages.ParseBundle("package_bundle_"+arch+"_debian"+version+".bzl", content)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	err = bundle.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", distro, "main", debArch)
 	if err != nil {
