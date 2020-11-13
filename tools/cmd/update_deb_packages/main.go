@@ -29,25 +29,25 @@ func updatePackageBundle(arch string, version string, distro string) {
 		log.Fatal(err)
 	}
 
-	row, err := packages.ParseBundle("package_bundle_"+arch+"_debian"+version+".bzl", content)
+	bundle, err := packages.ParseBundle("package_bundle_"+arch+"_debian"+version+".bzl", content)
 
-	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", distro, "main", debArch)
+	err = bundle.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", distro, "main", debArch)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", distro+"-updates", "main", debArch)
+	err = bundle.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", distro+"-updates", "main", debArch)
 	if err != nil {
 		log.Fatal(err)
 	}
 	if distro == "stretch" {
-		err = row.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", distro+"-backports", "main", debArch)
+		err = bundle.UpdateFromPackageIndex("debian", "http://deb.debian.org/debian", distro+"-backports", "main", debArch)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
 
 	if distro == "buster" || arch == "amd64" || arch == "arm64" {
-		err = row.UpdateFromPackageIndex("debian-security", "http://deb.debian.org/debian-security", distro+"/updates", "main", debArch)
+		err = bundle.UpdateFromPackageIndex("debian-security", "http://deb.debian.org/debian-security", distro+"/updates", "main", debArch)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -58,7 +58,7 @@ func updatePackageBundle(arch string, version string, distro string) {
 		log.Fatal(err)
 	}
 
-	err = row.Write(newFile)
+	err = bundle.Write(newFile)
 	if err != nil {
 		log.Fatal(err)
 	}
