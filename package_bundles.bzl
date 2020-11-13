@@ -46,10 +46,9 @@ def package_http_files():
         for suffix in DISTRO_SUFFIXES:
             for pkgName in DISTRO_PACKAGE_INFO[arch][suffix]:
                 pkg = DISTRO_PACKAGE_INFO[arch][suffix][pkgName]
-                if pkg["repository"] != "":
-                    http_file(
-                        name = pkgName.replace("+", "-") + "_" + arch + suffix,
-                        downloaded_file_path = "file.deb",
-                        sha256 = pkg["sha256"],
-                        urls = [DISTRO_REPOSITORIES[pkg["repository"]] + "/" + pkg["filename"]],
-                    )
+                http_file(
+                    name = pkgName.replace("+", "-") + "_" + arch + suffix,
+                    downloaded_file_path = "file.deb",
+                    sha256 = pkg["sha256"],
+                    urls = [DISTRO_REPOSITORIES[pkg["repository"]] + "/" + pkg["filename"]],
+                )

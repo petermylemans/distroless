@@ -382,12 +382,6 @@ PACKAGES = {
         "filename": "pool/main/libu/libunistring/libunistring2_0.9.10-1_s390x.deb",
         "sha256": "ef034c32eb1750a55b1d421d754aa15e3ae0f05f5cfa776de1b321a22f526b76",
     },
-    "libunwind8": {
-        "version": "",
-        "repository": "",
-        "filename": "",
-        "sha256": "",
-    },
     "libuuid1": {
         "version": "2.33.1-0.1",
         "repository": "debian",
