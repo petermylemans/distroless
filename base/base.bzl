@@ -5,11 +5,18 @@ load("//:package_bundles.bzl", "DISTRO_PACKAGES")
 load("//cacerts:cacerts.bzl", "cacerts")
 load("//:checksums.bzl", "ARCHITECTURES")
 load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
 
 NONROOT = 65532
 
 # Replicate everything for debian9 and debian10
 def distro_components(distro_suffix):
+    pkg_tar(
+        name = "os_release" + distro_suffix,
+        files = {
+            ":os_release/" + distro_suffix: "/etc/os-release",
+        },
+    )
     for arch in ARCHITECTURES:
         cacerts(
             name = "cacerts_" + arch + distro_suffix,
@@ -42,6 +49,7 @@ def distro_components(distro_suffix):
                     # directory with specific permissions.
                     ":tmp.tar",
                     ":nsswitch.tar",
+                    ":os_release" + distro_suffix,
                     ":cacerts_" + arch + distro_suffix + ".tar",
                 ],
                 user = "%d" % uid,
