@@ -9,17 +9,17 @@ import (
 )
 
 func main() {
-	updateStretch("amd64", "9", "stretch")
-	updateStretch("arm64", "9", "stretch")
-	updateStretch("ppc64le", "9", "stretch")
-	updateStretch("s390x", "9", "stretch")
-	updateStretch("amd64", "10", "buster")
-	updateStretch("arm64", "10", "buster")
-	updateStretch("ppc64le", "10", "buster")
-	updateStretch("s390x", "10", "buster")
+	updatePackageBundle("amd64", "9", "stretch")
+	updatePackageBundle("arm64", "9", "stretch")
+	updatePackageBundle("ppc64le", "9", "stretch")
+	updatePackageBundle("s390x", "9", "stretch")
+	updatePackageBundle("amd64", "10", "buster")
+	updatePackageBundle("arm64", "10", "buster")
+	updatePackageBundle("ppc64le", "10", "buster")
+	updatePackageBundle("s390x", "10", "buster")
 }
 
-func updateStretch(arch string, version string, distro string) {
+func updatePackageBundle(arch string, version string, distro string) {
 	debArch := arch
 	if arch == "ppc64le" {
 		debArch = "ppc64el"
