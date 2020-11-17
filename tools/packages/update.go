@@ -1,13 +1,11 @@
 package packages
 
 import (
-	"bufio"
-	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
+
 	"pault.ag/go/debian/control"
 	"pault.ag/go/debian/version"
 )
@@ -40,49 +38,12 @@ func downloadFile(filepath string, url string) (err error) {
 	return nil
 }
 
-func (bundle PackageBundle) UpdateFromPackageIndex(repository string, mirror string, distribution string, component string, arch string) (err error) {
-	packageIndex, err := ioutil.TempFile("", "Packages*")
-	packageIndexGz, err := ioutil.TempFile("", "Packages*.gz")
-	if err != nil {
-		return err
-	}
-
-	err = downloadFile(packageIndexGz.Name(), fmt.Sprintf("%s/dists/%s/%s/binary-%s/Packages.gz", mirror, distribution, component, arch))
-	if err != nil {
-		return err
-	}
-
-	zipReader, err := gzip.NewReader(packageIndexGz)
-	if err != nil {
-		return err
-	}
-	defer zipReader.Close()
-
-	content, err := ioutil.ReadAll(zipReader)
-	if err != nil {
-		return err
-	}
-	f, err := os.OpenFile(packageIndex.Name(), os.O_APPEND|os.O_WRONLY, 0600)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	_, err = f.Write(content)
-	if err != nil {
-		return err
-	}
-
-	index, err := control.ParseBinaryIndex(bufio.NewReader(packageIndex))
-	if err != nil {
-		return err
-	}
-
+func (bundle PackageBundle) UpdateFromPackageIndex(repository string, index []control.BinaryIndex) {
 	for _, pkgIndex := range index {
 		for idx := range bundle {
 			info := &bundle[idx]
 			if pkgIndex.Package == info.Name {
-				if version.Compare(info.Version, pkgIndex.Version) < 0 {
+				if version.Compare(info.Version, pkgIndex.Version) <= 0 {
 					info.Version = pkgIndex.Version
 					info.Repository = repository
 				}
@@ -93,6 +54,4 @@ func (bundle PackageBundle) UpdateFromPackageIndex(repository string, mirror str
 			}
 		}
 	}
-
-	return err
 }
